@@ -113,7 +113,4 @@ inline void htobe64buf(void *buf, uint64_t big64)
 	htobuf64(buf, htobe64(big64));
 }
 
-
-
 #endif // I2PENDIAN_H__
-

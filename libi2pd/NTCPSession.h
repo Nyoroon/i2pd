@@ -169,6 +169,7 @@ namespace transport
 
 			void SetSessionLimits(uint16_t softLimit, uint16_t hardLimit) { m_SoftLimit = softLimit; m_HardLimit = hardLimit; }
 			bool ShouldLimit() const { return ShouldHardLimit() || ShouldSoftLimit(); }
+
 		private:
 
 			/** @brief return true for hard limit */
@@ -211,6 +212,7 @@ namespace transport
 			boost::asio::ip::tcp::endpoint * m_ProxyEndpoint;
 
 			uint16_t m_SoftLimit, m_HardLimit;
+
 		public:
 
 			// for HTTP/I2PControl

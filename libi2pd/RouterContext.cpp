@@ -219,7 +219,7 @@ namespace i2p
 			case i2p::data::CAPS_FLAG_EXTRA_BANDWIDTH1 : limit = 2048; type = extra; break;
 			case i2p::data::CAPS_FLAG_EXTRA_BANDWIDTH2 : limit = 1000000; type = unlim; break; // 1Gbyte/s
 			default:
-				 limit =  48; type = low;
+				limit =  48; type = low;
 		}
 		/* update caps & flags in RI */
 		auto caps = m_RouterInfo.GetCaps ();

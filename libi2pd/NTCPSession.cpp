@@ -127,7 +127,7 @@ namespace transport
 		// receive Phase1
 		boost::asio::async_read (m_Socket, boost::asio::buffer(&m_Establisher->phase1, sizeof (NTCPPhase1)), boost::asio::transfer_all (),
 			std::bind(&NTCPSession::HandlePhase1Received, shared_from_this (),
-				std::placeholders::_1, std::placeholders::_2));
+			std::placeholders::_1, std::placeholders::_2));
 	}
 
 	void NTCPSession::HandlePhase1Sent (const boost::system::error_code& ecode, std::size_t bytes_transferred)
@@ -143,7 +143,7 @@ namespace transport
 		{
 			boost::asio::async_read (m_Socket, boost::asio::buffer(&m_Establisher->phase2, sizeof (NTCPPhase2)), boost::asio::transfer_all (),
 				std::bind(&NTCPSession::HandlePhase2Received, shared_from_this (),
-					std::placeholders::_1, std::placeholders::_2));
+				std::placeholders::_1, std::placeholders::_2));
 		}
 	}
 
@@ -212,7 +212,7 @@ namespace transport
 
 		m_Encryption.Encrypt ((uint8_t *)&m_Establisher->phase2.encrypted, sizeof(m_Establisher->phase2.encrypted), (uint8_t *)&m_Establisher->phase2.encrypted);
 		boost::asio::async_write (m_Socket, boost::asio::buffer (&m_Establisher->phase2, sizeof (NTCPPhase2)), boost::asio::transfer_all (),
-					std::bind(&NTCPSession::HandlePhase2Sent, shared_from_this (), std::placeholders::_1, std::placeholders::_2, tsB));
+			std::bind(&NTCPSession::HandlePhase2Sent, shared_from_this (), std::placeholders::_1, std::placeholders::_2, tsB));
 
 	}
 
@@ -229,7 +229,7 @@ namespace transport
 		{
 			boost::asio::async_read (m_Socket, boost::asio::buffer(m_ReceiveBuffer, NTCP_DEFAULT_PHASE3_SIZE), boost::asio::transfer_all (),
 				std::bind(&NTCPSession::HandlePhase3Received, shared_from_this (),
-					std::placeholders::_1, std::placeholders::_2, tsB));
+				std::placeholders::_1, std::placeholders::_2, tsB));
 		}
 	}
 
@@ -346,7 +346,7 @@ namespace transport
 			if (paddingSize > 0) signatureLen += (16 - paddingSize);
 			boost::asio::async_read (m_Socket, boost::asio::buffer(m_ReceiveBuffer, signatureLen), boost::asio::transfer_all (),
 				std::bind(&NTCPSession::HandlePhase4Received, shared_from_this (),
-					std::placeholders::_1, std::placeholders::_2, tsA));
+				std::placeholders::_1, std::placeholders::_2, tsA));
 		}
 	}
 
@@ -708,7 +708,8 @@ namespace transport
 		}
 		int rem = (len + 6) & 0x0F; // %16
 		int padding = 0;
-		if (rem > 0) {
+		if (rem > 0)
+		{
 			padding = 16 - rem;
 			// fill with random padding
 			RAND_bytes(sendBuffer + len + 2, padding);
@@ -755,12 +756,10 @@ namespace transport
 		}
 	}
 
-
 	void NTCPSession::SendTimeSyncMessage ()
 	{
 		Send (nullptr);
 	}
-
 
 	void NTCPSession::SendI2NPMessages (const std::vector<std::shared_ptr<I2NPMessage> >& msgs)
 	{
@@ -913,7 +912,6 @@ namespace transport
 		}
 	}
 
-
 	void NTCPServer::Run ()
 	{
 		while (m_IsRunning)
@@ -983,7 +981,6 @@ namespace transport
 			else
 				LogPrint (eLogError, "NTCP: Connected from error ", ec.message ());
 		}
-
 
 		if (error != boost::asio::error::operation_aborted)
 		{

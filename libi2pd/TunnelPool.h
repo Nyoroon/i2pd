@@ -23,7 +23,6 @@ namespace tunnel
 	class InboundTunnel;
 	class OutboundTunnel;
 
-
 	enum TunnelBuildResult {
 		eBuildResultOkay, // tunnel was built okay
 		eBuildResultRejected, // tunnel build was explicitly rejected
@@ -40,7 +39,6 @@ namespace tunnel
 		virtual bool SelectPeers(Path & peers, int hops, bool isInbound) = 0;
 		virtual bool OnBuildResult(const Path & peers, bool isInbound, TunnelBuildResult result) = 0;
 	};
-
 
 	typedef std::function<std::shared_ptr<const i2p::data::RouterInfo>(std::shared_ptr<const i2p::data::RouterInfo>)> SelectHopFunc;
 	// standard peer selection algorithm
@@ -83,20 +81,20 @@ namespace tunnel
 			void UnsetCustomPeerSelector();
 			bool HasCustomPeerSelector();
 
-		/** @brief make this tunnel pool yield tunnels that fit latency range [min, max] */
-		void RequireLatency(uint64_t min, uint64_t max) { m_MinLatency = min; m_MaxLatency = max; }
+			/** @brief make this tunnel pool yield tunnels that fit latency range [min, max] */
+			void RequireLatency(uint64_t min, uint64_t max) { m_MinLatency = min; m_MaxLatency = max; }
 
-		/** @brief return true if this tunnel pool has a latency requirement */
-		bool HasLatencyRequirement() const { return m_MinLatency > 0 && m_MaxLatency > 0; }
+			/** @brief return true if this tunnel pool has a latency requirement */
+			bool HasLatencyRequirement() const { return m_MinLatency > 0 && m_MaxLatency > 0; }
 
-		/** @brief get the lowest latency tunnel in this tunnel pool regardless of latency requirements */
-		std::shared_ptr<InboundTunnel> GetLowestLatencyInboundTunnel(std::shared_ptr<InboundTunnel> exclude=nullptr) const;
-		std::shared_ptr<OutboundTunnel> GetLowestLatencyOutboundTunnel(std::shared_ptr<OutboundTunnel> exclude=nullptr) const;
+			/** @brief get the lowest latency tunnel in this tunnel pool regardless of latency requirements */
+			std::shared_ptr<InboundTunnel> GetLowestLatencyInboundTunnel(std::shared_ptr<InboundTunnel> exclude=nullptr) const;
+			std::shared_ptr<OutboundTunnel> GetLowestLatencyOutboundTunnel(std::shared_ptr<OutboundTunnel> exclude=nullptr) const;
 
-		void OnTunnelBuildResult(std::shared_ptr<Tunnel> tunnel, TunnelBuildResult result);
+			void OnTunnelBuildResult(std::shared_ptr<Tunnel> tunnel, TunnelBuildResult result);
 
-		// for overriding tunnel peer selection
-		std::shared_ptr<const i2p::data::RouterInfo> SelectNextHop (std::shared_ptr<const i2p::data::RouterInfo> prevHop) const;
+			// for overriding tunnel peer selection
+			std::shared_ptr<const i2p::data::RouterInfo> SelectNextHop (std::shared_ptr<const i2p::data::RouterInfo> prevHop) const;
 
 		private:
 
@@ -123,8 +121,8 @@ namespace tunnel
 			std::mutex m_CustomPeerSelectorMutex;
 			ITunnelPeerSelector * m_CustomPeerSelector;
 
-		uint64_t m_MinLatency=0; // if > 0 this tunnel pool will try building tunnels with minimum latency by ms
-		uint64_t m_MaxLatency=0; // if > 0 this tunnel pool will try building tunnels with maximum latency by ms
+			uint64_t m_MinLatency=0; // if > 0 this tunnel pool will try building tunnels with minimum latency by ms
+			uint64_t m_MaxLatency=0; // if > 0 this tunnel pool will try building tunnels with maximum latency by ms
 
 		public:
 

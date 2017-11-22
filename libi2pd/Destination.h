@@ -201,8 +201,8 @@ namespace client
 			void AcceptOnce (const i2p::stream::StreamingDestination::Acceptor& acceptor);
 
 			// datagram
-      i2p::datagram::DatagramDestination * GetDatagramDestination () const { return m_DatagramDestination; };
-      i2p::datagram::DatagramDestination * CreateDatagramDestination ();
+			i2p::datagram::DatagramDestination * GetDatagramDestination () const { return m_DatagramDestination; };
+			i2p::datagram::DatagramDestination * CreateDatagramDestination ();
 
 			// implements LocalDestination
 			bool Decrypt (const uint8_t * encrypted, uint8_t * data, BN_CTX * ctx) const;
@@ -232,7 +232,7 @@ namespace client
 
 			std::shared_ptr<i2p::stream::StreamingDestination> m_StreamingDestination; // default
 			std::map<uint16_t, std::shared_ptr<i2p::stream::StreamingDestination> > m_StreamingDestinationsByPorts;
-      		i2p::datagram::DatagramDestination * m_DatagramDestination;
+			i2p::datagram::DatagramDestination * m_DatagramDestination;
 			int m_RefCounter; // how many clients(tunnels) use this destination
 
 			boost::asio::deadline_timer m_ReadyChecker;

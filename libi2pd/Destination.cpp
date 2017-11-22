@@ -24,9 +24,9 @@ namespace client
 		int outQty  = DEFAULT_OUTBOUND_TUNNELS_QUANTITY;
 		int numTags = DEFAULT_TAGS_TO_SEND;
 		std::shared_ptr<std::vector<i2p::data::IdentHash> > explicitPeers;
-		try 
+		try
 		{
-			if (params) 
+			if (params)
 			{
 				auto it = params->find (I2CP_PARAM_INBOUND_TUNNEL_LENGTH);
 				if (it != params->end ())
@@ -61,8 +61,8 @@ namespace client
 				it = params->find (I2CP_PARAM_INBOUND_NICKNAME);
 				if (it != params->end ()) m_Nickname = it->second; // otherwise we set deafult nickname in Start when we know local address
 			}
-		} 
-		catch (std::exception & ex) 
+		}
+		catch (std::exception & ex)
 		{
 			LogPrint(eLogError, "Destination: unable to parse parameters for destination: ", ex.what());
 		}
@@ -486,7 +486,7 @@ namespace client
 				m_PublishReplyToken = 0;
 				if (GetIdentity ()->GetCryptoKeyType () == i2p::data::CRYPTO_KEY_TYPE_ELGAMAL)
 				{
-					LogPrint (eLogWarning, "Destination: Publish confirmation was not received in ", PUBLISH_CONFIRMATION_TIMEOUT,  " seconds, will try again");				
+					LogPrint (eLogWarning, "Destination: Publish confirmation was not received in ", PUBLISH_CONFIRMATION_TIMEOUT,  " seconds, will try again");
 					Publish ();
 				}
 				else
@@ -497,7 +497,7 @@ namespace client
 					m_PublishVerificationTimer.expires_from_now (boost::posix_time::seconds(PUBLISH_VERIFICATION_TIMEOUT));
 					m_PublishVerificationTimer.async_wait (std::bind (&LeaseSetDestination::HandlePublishVerificationTimer,
 			shared_from_this (), std::placeholders::_1));
-					
+
 				}
 			}
 		}
@@ -511,25 +511,25 @@ namespace client
 			RequestLeaseSet (GetIdentHash (),
 				// "this" added due to bug in gcc 4.7-4.8
 				[s,this](std::shared_ptr<i2p::data::LeaseSet> leaseSet)
+			{
+				if (leaseSet)
 				{
-					if (leaseSet)
+					if (s->m_LeaseSet && *s->m_LeaseSet == *leaseSet)
 					{
-						if (s->m_LeaseSet && *s->m_LeaseSet == *leaseSet)
-						{
-							// we got latest LeasetSet
-							LogPrint (eLogDebug, "Destination: published LeaseSet verified for ", GetIdentHash().ToBase32());
-							s->m_PublishVerificationTimer.expires_from_now (boost::posix_time::seconds(PUBLISH_REGULAR_VERIFICATION_INTERNAL));
-							s->m_PublishVerificationTimer.async_wait (std::bind (&LeaseSetDestination::HandlePublishVerificationTimer, s, std::placeholders::_1));
-							return;
-						}
-						else
-							LogPrint (eLogDebug, "Destination: LeaseSet is different than just published for ", GetIdentHash().ToBase32());
+						// we got latest LeasetSet
+						LogPrint (eLogDebug, "Destination: published LeaseSet verified for ", GetIdentHash().ToBase32());
+						s->m_PublishVerificationTimer.expires_from_now (boost::posix_time::seconds(PUBLISH_REGULAR_VERIFICATION_INTERNAL));
+						s->m_PublishVerificationTimer.async_wait (std::bind (&LeaseSetDestination::HandlePublishVerificationTimer, s, std::placeholders::_1));
+						return;
 					}
 					else
-						LogPrint (eLogWarning, "Destination: couldn't find published LeaseSet for ", GetIdentHash().ToBase32());
-					// we have to publish again
-					s->Publish ();
-				});
+						LogPrint (eLogDebug, "Destination: LeaseSet is different than just published for ", GetIdentHash().ToBase32());
+				}
+				else
+					LogPrint (eLogWarning, "Destination: couldn't find published LeaseSet for ", GetIdentHash().ToBase32());
+				// we have to publish again
+				s->Publish ();
+			});
 		}
 	}
 
@@ -555,15 +555,15 @@ namespace client
 	{
 		auto s = shared_from_this ();
 		m_Service.post ([dest, notify, s](void)
+		{
+			auto it = s->m_LeaseSetRequests.find (dest);
+			if (it != s->m_LeaseSetRequests.end ())
 			{
-				auto it = s->m_LeaseSetRequests.find (dest);
-				if (it != s->m_LeaseSetRequests.end ())
-				{
-					auto requestComplete = it->second;
-					s->m_LeaseSetRequests.erase (it);
-					if (notify && requestComplete) requestComplete->Complete (nullptr);
-				}
-			});
+				auto requestComplete = it->second;
+				s->m_LeaseSetRequests.erase (it);
+				if (notify && requestComplete) requestComplete->Complete (nullptr);
+			}
+		});
 	}
 
 	void LeaseSetDestination::RequestLeaseSet (const i2p::data::IdentHash& dest, RequestComplete requestComplete)
@@ -722,9 +722,9 @@ namespace client
 		if (isPublic)
 			PersistTemporaryKeys ();
 		else
-			i2p::data::PrivateKeys::GenerateCryptoKeyPair(GetIdentity ()->GetCryptoKeyType (), 
+			i2p::data::PrivateKeys::GenerateCryptoKeyPair(GetIdentity ()->GetCryptoKeyType (),
 				m_EncryptionPrivateKey, m_EncryptionPublicKey);
-		m_Decryptor = m_Keys.CreateDecryptor (m_EncryptionPrivateKey); 
+		m_Decryptor = m_Keys.CreateDecryptor (m_EncryptionPrivateKey);
 		if (isPublic)
 			LogPrint (eLogInfo, "Destination: Local address ", GetIdentHash().ToBase32 (), " created");
 	}
@@ -766,7 +766,7 @@ namespace client
 				delete m_DatagramDestination;
 				m_DatagramDestination = nullptr;
 			}
-		  	return true;
+			return true;
 		}
 		else
 			return false;
@@ -908,7 +908,7 @@ namespace client
 		return dest;
 	}
 
-  i2p::datagram::DatagramDestination * ClientDestination::CreateDatagramDestination ()
+	i2p::datagram::DatagramDestination * ClientDestination::CreateDatagramDestination ()
 	{
 		if (m_DatagramDestination == nullptr)
 			m_DatagramDestination = new i2p::datagram::DatagramDestination (GetSharedFromThis ());
@@ -942,7 +942,7 @@ namespace client
 		}
 
 		LogPrint (eLogInfo, "Destination: Creating new temporary keys for address ", ident, ".b32.i2p");
-		i2p::data::PrivateKeys::GenerateCryptoKeyPair(GetIdentity ()->GetCryptoKeyType (), 
+		i2p::data::PrivateKeys::GenerateCryptoKeyPair(GetIdentity ()->GetCryptoKeyType (),
 				m_EncryptionPrivateKey, m_EncryptionPublicKey);
 
 		std::ofstream f1 (path, std::ofstream::binary | std::ofstream::out);

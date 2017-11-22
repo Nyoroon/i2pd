@@ -119,7 +119,7 @@ namespace transport
 		m_Work (nullptr), m_PeerCleanupTimer (nullptr), m_PeerTestTimer (nullptr),
 		m_NTCPServer (nullptr), m_SSUServer (nullptr), m_DHKeysPairSupplier (5), // 5 pre-generated keys
 		m_TotalSentBytes(0), m_TotalReceivedBytes(0), m_TotalTransitTransmittedBytes (0),
- 		m_InBandwidth (0), m_OutBandwidth (0), m_TransitBandwidth(0),
+		m_InBandwidth (0), m_OutBandwidth (0), m_TransitBandwidth(0),
 		m_LastInBandwidthUpdateBytes (0), m_LastOutBandwidthUpdateBytes (0),
 		m_LastTransitBandwidthUpdateBytes (0), m_LastBandwidthUpdateTime (0)
 	{
@@ -236,11 +236,11 @@ namespace transport
 		m_PeerCleanupTimer->expires_from_now (boost::posix_time::seconds(5*SESSION_CREATION_TIMEOUT));
 		m_PeerCleanupTimer->async_wait (std::bind (&Transports::HandlePeerCleanupTimer, this, std::placeholders::_1));
 
-                if (m_IsNAT)
-                {
-                    m_PeerTestTimer->expires_from_now (boost::posix_time::minutes(PEER_TEST_INTERVAL));
-                    m_PeerTestTimer->async_wait (std::bind (&Transports::HandlePeerTestTimer, this, std::placeholders::_1));
-                }
+		if (m_IsNAT)
+		{
+			m_PeerTestTimer->expires_from_now (boost::posix_time::minutes(PEER_TEST_INTERVAL));
+			m_PeerTestTimer->async_wait (std::bind (&Transports::HandlePeerTestTimer, this, std::placeholders::_1));
+		}
 	}
 
 	void Transports::Stop ()
@@ -395,7 +395,7 @@ namespace transport
 					if (!address->host.is_unspecified ()) // we have address now
 #else
 					boost::system::error_code ecode;
-				  address->host.to_string (ecode);
+					address->host.to_string (ecode);
 					if (!ecode)
 #endif
 					{
@@ -623,7 +623,7 @@ namespace transport
 	void Transports::DetectExternalIP ()
 	{
 		if (RoutesRestricted())
-  		{
+		{
 			LogPrint(eLogInfo, "Transports: restricted routes enabled, not detecting ip");
 			i2p::context.SetStatus (eRouterStatusOK);
 			return;

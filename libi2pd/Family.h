@@ -28,7 +28,7 @@ namespace data
 		private:
 
 			std::map<std::string, std::shared_ptr<i2p::crypto::Verifier> > m_SigningKeys;
-	};		
+	};
 
 	std::string CreateFamilySignature (const std::string& family, const IdentHash& ident);
 	// return base64 signature of empty string in case of failure

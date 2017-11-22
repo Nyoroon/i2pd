@@ -110,16 +110,16 @@ namespace transport
 			size_t GetNumPeers () const { return m_Peers.size (); };
 			std::shared_ptr<const i2p::data::RouterInfo> GetRandomPeer () const;
 
-    /** get a trusted first hop for restricted routes */
-    std::shared_ptr<const i2p::data::RouterInfo> GetRestrictedPeer() const;
-    /** do we want to use restricted routes? */
-    bool RoutesRestricted() const;
-    /** restrict routes to use only these router families for first hops */
-    void RestrictRoutesToFamilies(std::set<std::string> families);
-    /** restrict routes to use only these routers for first hops */
-    void RestrictRoutesToRouters(std::set<i2p::data::IdentHash> routers);
+			/** get a trusted first hop for restricted routes */
+			std::shared_ptr<const i2p::data::RouterInfo> GetRestrictedPeer() const;
+			/** do we want to use restricted routes? */
+			bool RoutesRestricted() const;
+			/** restrict routes to use only these router families for first hops */
+			void RestrictRoutesToFamilies(std::set<std::string> families);
+			/** restrict routes to use only these routers for first hops */
+			void RestrictRoutesToRouters(std::set<i2p::data::IdentHash> routers);
 
-    bool IsRestrictedPeer(const i2p::data::IdentHash & ident) const;
+			bool IsRestrictedPeer(const i2p::data::IdentHash & ident) const;
 
 			void PeerTest ();
 
@@ -136,10 +136,10 @@ namespace transport
 
 			void NTCPResolve (const std::string& addr, const i2p::data::IdentHash& ident);
 			void HandleNTCPResolve (const boost::system::error_code& ecode, boost::asio::ip::tcp::resolver::iterator it,
- 				i2p::data::IdentHash ident, std::shared_ptr<boost::asio::ip::tcp::resolver> resolver);
+				i2p::data::IdentHash ident, std::shared_ptr<boost::asio::ip::tcp::resolver> resolver);
 			void SSUResolve (const std::string& addr, const i2p::data::IdentHash& ident);
 			void HandleSSUResolve (const boost::system::error_code& ecode, boost::asio::ip::tcp::resolver::iterator it,
- 				i2p::data::IdentHash ident, std::shared_ptr<boost::asio::ip::tcp::resolver> resolver);
+				i2p::data::IdentHash ident, std::shared_ptr<boost::asio::ip::tcp::resolver> resolver);
 
 			void UpdateBandwidth ();
 			void DetectExternalIP ();
